@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Manager</title>
+</head>
+
+<body>
+
+    <h1>Task Manager</h1>
+
+    <h2>Add Task</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Title:</label>
+        <input type="text" name="title" required>
+
+        <br><br>
+
+        <label>Description:</label>
+        <textarea name="description" required></textarea>
+
+        <br><br>
+
+        <button type="submit">Add Task</button>
+    </form>
+
+    <hr>
+
+    <h2>Tasks</h2>
+
+    {% for task in tasks %}
+
+        <h3>{{ task.title }}</h3>
+        <p>{{ task.description }}</p>
+
+        {% if task.completed %}
+            <p>Status: Completed</p>
+        {% else %}
+            <p>Status: Pending</p>
+        {% endif %}
+
+        <a href="{% url 'update_task' task.id %}">Update</a>
+
+        <form method="POST"
+            action="{% url 'delete_task' task.id %}"
+            style="display:inline;">
+
+            {% csrf_token %}
+
+            <button type="submit">Delete</button>
+
+        </form>
+
+        <hr>
+
+    {% empty %}
+
+        <p>No tasks available.</p>
+
+    {% endfor %}
+
+</body>
+</html>
